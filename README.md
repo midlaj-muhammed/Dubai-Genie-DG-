@@ -2,6 +2,8 @@
 
 Dubai Genie (DG) is an AI-powered trip planning chatbot that helps you plan your perfect trip to Dubai. Using OpenAI's GPT-4.1 model, DG provides personalized travel recommendations, detailed information about attractions, and customized itineraries based on your preferences.
 
+🌐 **[Live Demo]()**
+
 ## Features
 
 - Interactive chat interface using Streamlit
