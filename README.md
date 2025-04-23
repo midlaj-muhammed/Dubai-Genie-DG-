@@ -2,7 +2,7 @@
 
 Dubai Genie (DG) is an AI-powered trip planning chatbot that helps you plan your perfect trip to Dubai. Using OpenAI's GPT-4.1 model, DG provides personalized travel recommendations, detailed information about attractions, and customized itineraries based on your preferences.
 
-🌐 **[Live Demo]()**
+The chatbot features a clean, minimal UI design inspired by modern AI assistants like ChatGPT and Gemini.
 
 ## Features
 
@@ -38,6 +38,11 @@ pip install streamlit openai python-dotenv
 OPENAI_API_KEY=your_api_key_here
 ```
 
+   > **IMPORTANT**: You need a valid OpenAI API key with sufficient quota to use this application. If you see an error message like "⚠️ OpenAI API quota exceeded", you'll need to:
+   > - Check your OpenAI account billing status at [platform.openai.com/account/billing](https://platform.openai.com/account/billing)
+   > - Add funds to your account if needed
+   > - Or use a different API key with available quota
+
 5. Run the application:
 ```bash
 streamlit run chatbot.py
@@ -48,7 +53,16 @@ streamlit run chatbot.py
 1. Open your web browser and navigate to `http://localhost:8501`
 2. Start chatting with Dubai Genie
 3. Share your travel preferences, interests, and requirements
-4. Get personalized recommendations and itineraries
+4. Use the Quick Questions in the sidebar for common queries
+5. Get personalized recommendations and itineraries
+
+### Troubleshooting API Issues
+
+If you encounter API-related errors:
+
+- **API Key Not Found**: Make sure your `.env` file exists and contains a valid API key
+- **API Quota Exceeded**: Your OpenAI account has reached its usage limit. Check your billing status and add funds if needed
+- **Model Not Available**: Ensure your OpenAI account has access to the GPT-4.1 model. You can modify the model in `chatbot.py` if needed
 
 ## Security
 
@@ -69,3 +83,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - OpenAI for providing the GPT-4.1 model
 - Streamlit for the interactive chat interface
 - Python-dotenv for environment variable management
+
+## Screenshots
+
+![Dubai Genie Screenshot](https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80)
+
+*Dubai Genie features a clean, minimal interface for planning your perfect Dubai trip.*
