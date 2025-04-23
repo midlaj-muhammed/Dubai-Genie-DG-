@@ -62,7 +62,7 @@ def get_response_from_openai(messages):
 
     try:
         completion = client.chat.completions.create(
-            model="gpt-4.1",
+            model="gpt-3.5-turbo",  # Using a free/less expensive model instead of gpt-4.1
             messages=messages,
             temperature=0.7,
         )
@@ -137,6 +137,7 @@ with st.sidebar:
 
     st.subheader("About")
     st.write("Dubai Genie is your AI-powered trip planner for Dubai. Ask me anything about attractions, restaurants, activities, and more!")
+    st.caption("Powered by GPT-3.5-Turbo")
 
     st.markdown("---")
 
@@ -173,6 +174,7 @@ with st.sidebar:
 
 # Main chat interface
 st.markdown("<h1 class='main-header'>✨ Dubai Genie - Your Personal Trip Planner ✨</h1>", unsafe_allow_html=True)
+st.caption("Using GPT-3.5-Turbo - Free tier model")
 
 # Display Dubai skyline image
 st.image("https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80", use_container_width=True)
