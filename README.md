@@ -1,8 +1,10 @@
 # Dubai Genie - Your Personal Trip Planner
 
-Dubai Genie (DG) is an AI-powered trip planning chatbot that helps you plan your perfect trip to Dubai. Using OpenAI's GPT-4.1 model, DG provides personalized travel recommendations, detailed information about attractions, and customized itineraries based on your preferences.
+Dubai Genie (DG) is an AI-powered trip planning chatbot that helps you plan your perfect trip to Dubai. Using Google's Gemini 2.0 Flash model, DG provides personalized travel recommendations, detailed information about attractions, and customized itineraries based on your preferences.
 
 The chatbot features a clean, minimal UI design inspired by modern AI assistants like ChatGPT and Gemini.
+
+🌐 **[Live Demo](https://dubaigenie.streamlit.app/)**
 
 ## Features
 
@@ -30,18 +32,18 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 3. Install dependencies:
 ```bash
-pip install streamlit openai python-dotenv
+pip install streamlit google-generativeai python-dotenv
 ```
 
-4. Create a `.env` file in the project root with your OpenAI API key:
+4. Create a `.env` file in the project root with your Google API key:
 ```
-OPENAI_API_KEY=your_api_key_here
+GOOGLE_API_KEY=your_google_api_key_here
 ```
 
-   > **IMPORTANT**: You need a valid OpenAI API key with sufficient quota to use this application. If you see an error message like "⚠️ OpenAI API quota exceeded", you'll need to:
-   > - Check your OpenAI account billing status at [platform.openai.com/account/billing](https://platform.openai.com/account/billing)
-   > - Add funds to your account if needed
-   > - Or use a different API key with available quota
+   > **IMPORTANT**: You need a valid Google API key to use this application. If you see an error message like "⚠️ Google API quota exceeded", you'll need to:
+   > - Get a Google API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+   > - Make sure your Google account has access to Gemini models
+   > - Check your Google API usage limits in your Google Cloud Console
 
 5. Run the application:
 ```bash
@@ -60,15 +62,15 @@ streamlit run chatbot.py
 
 If you encounter API-related errors:
 
-- **API Key Not Found**: Make sure your `.env` file exists and contains a valid API key
-- **API Quota Exceeded**: Your OpenAI account has reached its usage limit. Check your billing status and add funds if needed
-- **Model Not Available**: Ensure your OpenAI account has access to the GPT-4.1 model. You can modify the model in `chatbot.py` if needed
+- **API Key Not Found**: Make sure your `.env` file exists and contains a valid Google API key
+- **API Quota Exceeded**: Your Google account may have reached its usage limit. Check your Google Cloud Console
+- **Model Not Available**: Ensure your Google account has access to the Gemini 2.0 Flash model
 
 ## Security
 
 - API keys should never be committed to version control
 - The `.env` file is included in `.gitignore` for security
-- Keep your OpenAI API key confidential
+- Keep your Google API key confidential
 
 ## Contributing
 
@@ -80,7 +82,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- OpenAI for providing the GPT-4.1 model
+- Google for providing the Gemini 2.0 Flash model
 - Streamlit for the interactive chat interface
 - Python-dotenv for environment variable management
 
