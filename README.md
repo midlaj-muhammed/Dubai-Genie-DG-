@@ -117,13 +117,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🔧 Python-dotenv for environment variable management
 - 🌍 The open-source community for inspiration and support
 
-## 📱 Screenshots
-
-<div align="center">
-  <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Dubai Genie Screenshot" width="600"/>
-  <p><em>✨ Dubai Genie features a clean, minimal interface for planning your perfect Dubai trip ✨</em></p>
-</div>
-
 ## 📊 Project Status
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/midlaj-muhammed/Dubai-Genie-DG-)
