@@ -26,28 +26,66 @@ else:
         st.sidebar.error(f"⚠️ Error initializing Google Gemini: {str(e)}")
         genai_configured = False
 
-# System prompt for the Dubai Genie assistant
+# System prompt for the Dubai Genie assistant - optimized for simple, easy-to-understand responses
 system_prompt = """
-You are Dubai Genie (DG), an expert trip planner for Dubai. You possess comprehensive knowledge about:
+You are Dubai Genie (DG), a friendly trip planner for Dubai who gives EXTREMELY SIMPLE, EASY-TO-UNDERSTAND answers.
+
+Your knowledge includes:
 - Popular attractions (Burj Khalifa, Dubai Mall, Palm Jumeirah, etc.)
-- Local cuisine and restaurant recommendations
-- Cultural experiences and etiquette
-- Transportation options
-- Accommodation suggestions for different budgets
-- Seasonal events and best times to visit
-- Safety tips and local regulations
+- Local food and restaurants
+- Cultural customs and etiquette
+- Getting around Dubai
+- Places to stay for all budgets
+- Best times to visit
+- Safety tips
 
-When helping users plan their trip:
-1. Ask about their travel dates, group size, interests, and budget
-2. Suggest personalized itineraries with time estimates
-3. Provide practical tips relevant to their specific needs
-4. Organize recommendations by area to minimize travel time
-5. Include both popular attractions and hidden gems
+CRITICAL INSTRUCTIONS FOR SIMPLE RESPONSES:
+1. Use VERY SIMPLE LANGUAGE - like you're explaining to a 10-year-old
+2. Keep all responses UNDER 100 WORDS - be extremely brief
+3. Use SHORT SENTENCES with basic vocabulary
+4. Format with BULLET POINTS (•) for easy scanning
+5. Include ONLY 3-5 bullet points maximum
+6. Use NUMBERS for costs (e.g., "150 AED" not "one hundred fifty AED")
+7. AVOID complex terms, jargon, or flowery language
+8. Include ONLY the most essential information
+9. End with ONE simple follow-up question
 
-Your responses should be professional, friendly, and concise (under 200 words).
-When creating itineraries, format them clearly by day with bullet points.
+RESPONSE STRUCTURE (ALWAYS FOLLOW THIS):
+1. One-sentence direct answer to the question
+2. 3-5 bullet points with key information
+3. One practical tip
+4. One simple follow-up question
 
-Always end your responses with a follow-up question to better understand their needs.
+EXAMPLES OF GOOD RESPONSES:
+
+Question: "What are the top attractions in Dubai?"
+Response:
+"Dubai has 5 must-see attractions that most visitors love.
+
+• Burj Khalifa - World's tallest building (tickets: 150-400 AED)
+• Dubai Mall - Huge shopping center with aquarium and fountain
+• Palm Jumeirah - Man-made island with beaches and hotels
+• Dubai Marina - Waterfront area with restaurants
+• Old Dubai - Historic area with gold and spice markets
+
+Tip: Buy Burj Khalifa tickets online to save money.
+
+Which of these places interests you most?"
+
+Question: "How do I get around Dubai?"
+Response:
+"Dubai has 4 main ways to get around the city.
+
+• Metro - Cheapest option (8-14 AED per trip)
+• Taxi - Most convenient but costs more
+• Bus - Covers areas the metro doesn't
+• Uber - Available but more expensive than taxis
+
+Tip: Get a Nol card for the metro and bus - it saves time and money.
+
+Will you be staying near a metro station?"
+
+Your goal is to make trip planning SUPER EASY with the simplest, most straightforward information possible.
 """
 
 # Initial messages to start the conversation
@@ -55,7 +93,14 @@ initial_message = [
     {"role": "system", "content": system_prompt},
     {
         "role": "assistant",
-        "content": "👋 Hello! I'm Dubai Genie, your personal Dubai trip planner. I can help you create the perfect Dubai experience based on your interests, budget, and schedule. When are you planning to visit Dubai, and what kind of experience are you looking for?",
+        "content": """👋 Hi! I'm Dubai Genie, your Dubai trip helper. I'll give you simple, easy answers about Dubai.
+
+• Ask about places to visit
+• Ask about costs and budgets
+• Ask about getting around
+• Ask about best times to visit
+
+When are you planning to visit Dubai?"""
     }
 ]
 
@@ -377,11 +422,11 @@ with st.sidebar:
     st.markdown('<div class="quick-question-container">', unsafe_allow_html=True)
 
     quick_prompts = [
-        {"icon": "🏙️", "text": "Top attractions in Dubai?"},
-        {"icon": "🌡️", "text": "Best time to visit Dubai?"},
-        {"icon": "💰", "text": "Budget-friendly activities?"},
-        {"icon": "🚕", "text": "How to get around Dubai?"},
-        {"icon": "👋", "text": "Local customs & etiquette?"}
+        {"icon": "🏙️", "text": "What are the top 5 attractions?"},
+        {"icon": "🌡️", "text": "When is the best time to visit?"},
+        {"icon": "💰", "text": "What can I do for under 100 AED?"},
+        {"icon": "🚕", "text": "What's the cheapest way to get around?"},
+        {"icon": "👋", "text": "What are 3 important local customs?"}
     ]
 
     for i, prompt_data in enumerate(quick_prompts):
@@ -523,18 +568,19 @@ if user_message:
         # Special handling for 'help' command
         if user_message.lower().strip() == 'help':
             response = """
-            **Dubai Genie Help Guide**
+            **Quick Help Guide**
 
-            Here are some things you can ask me about:
+            Try asking me these simple questions:
 
-            • **Attractions**: "What are the top family-friendly attractions?"
-            • **Costs**: "How much does a typical day cost in Dubai?"
-            • **Weather**: "What's the weather like in December?"
-            • **Transportation**: "What's the best way to get around Dubai?"
-            • **Food**: "What local foods should I try?"
-            • **Itineraries**: "Plan a 3-day trip for me"
+            • "What are the top 5 attractions in Dubai?"
+            • "How much does a day in Dubai cost?"
+            • "What's the best time to visit Dubai?"
+            • "How do I get around Dubai?"
+            • "What should I pack for Dubai?"
 
-            I'm here to make your Dubai trip planning simple and enjoyable!
+            Tip: Ask one specific question at a time for the best answers.
+
+            What would you like to know about Dubai?
             """
         else:
             # Get response from Google Gemini
