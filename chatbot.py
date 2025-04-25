@@ -26,28 +26,35 @@ else:
         st.sidebar.error(f"⚠️ Error initializing Google Gemini: {str(e)}")
         genai_configured = False
 
-# System prompt for the Dubai Genie assistant
+# System prompt for the Dubai Genie assistant - optimized for simple, concise responses
 system_prompt = """
-You are Dubai Genie (DG), an expert trip planner for Dubai. You possess comprehensive knowledge about:
+You are Dubai Genie (DG), a friendly trip planner for Dubai who gives SIMPLE, CONCISE answers that are EASY TO UNDERSTAND.
+
+Your knowledge includes:
 - Popular attractions (Burj Khalifa, Dubai Mall, Palm Jumeirah, etc.)
-- Local cuisine and restaurant recommendations
-- Cultural experiences and etiquette
-- Transportation options
-- Accommodation suggestions for different budgets
-- Seasonal events and best times to visit
-- Safety tips and local regulations
+- Local food and restaurants
+- Cultural customs and etiquette
+- Getting around Dubai
+- Places to stay for all budgets
+- Best times to visit
+- Safety tips
 
-When helping users plan their trip:
-1. Ask about their travel dates, group size, interests, and budget
-2. Suggest personalized itineraries with time estimates
-3. Provide practical tips relevant to their specific needs
-4. Organize recommendations by area to minimize travel time
-5. Include both popular attractions and hidden gems
+IMPORTANT GUIDELINES:
+1. Keep all responses UNDER 150 WORDS - be brief and to the point
+2. Use SIMPLE LANGUAGE - avoid complex terms
+3. Format information with BULLET POINTS (•) for easy scanning
+4. HIGHLIGHT key information with **bold text**
+5. For itineraries, clearly label each day (Day 1, Day 2, etc.)
+6. Include 1-2 specific details that make recommendations helpful
+7. End with ONE short follow-up question
 
-Your responses should be professional, friendly, and concise (under 200 words).
-When creating itineraries, format them clearly by day with bullet points.
+RESPONSE STRUCTURE:
+- Start with a direct answer to the question
+- Use 3-5 bullet points for lists
+- Include prices in AED when relevant
+- Mention one practical tip when appropriate
 
-Always end your responses with a follow-up question to better understand their needs.
+Your goal is to make trip planning EASY and ENJOYABLE with simple, helpful information that's instantly understandable.
 """
 
 # Initial messages to start the conversation
@@ -55,7 +62,7 @@ initial_message = [
     {"role": "system", "content": system_prompt},
     {
         "role": "assistant",
-        "content": "👋 Hello! I'm Dubai Genie, your personal Dubai trip planner. I can help you create the perfect Dubai experience based on your interests, budget, and schedule. When are you planning to visit Dubai, and what kind of experience are you looking for?",
+        "content": "👋 Hi there! I'm Dubai Genie, your friendly Dubai trip helper. I'll give you simple, easy-to-understand advice for your Dubai adventure. When are you planning to visit, and what are you most excited to experience?",
     }
 ]
 
@@ -153,111 +160,251 @@ def handle_quick_prompt(prompt):
     st.session_state.quick_prompt_selected = prompt
     st.session_state.conversation_started = True
 
-# Custom CSS for minimal design
+# Custom CSS for a more attractive and minimal design
 st.markdown("""
 <style>
-/* Main container styling */
-.main {max-width: 800px; margin: 0 auto;}
+/* Global styling */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+* {font-family: 'Inter', sans-serif;}
+.main {max-width: 900px; margin: 0 auto; padding: 0 20px;}
+body {background-color: #fafafa;}
 
 /* Header styling */
-.main-header {font-size: 24px; font-weight: 600; margin-bottom: 10px; color: #444;}
-.sub-header {font-size: 16px; color: #666; margin-bottom: 20px;}
+.main-header {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+    letter-spacing: -0.5px;
+}
+.sub-header {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 25px;
+    font-weight: 400;
+}
+.app-caption {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 30px;
+}
 
 /* Chat container */
-.chat-container {margin-bottom: 20px;}
+.chat-container {
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
 
 /* Message styling */
-.stChatMessage {border-radius: 8px; padding: 10px; margin-bottom: 10px;}
-.stChatMessage[data-testid*="user"] {background-color: #f7f7f7;}
-.stChatMessage[data-testid*="assistant"] {background-color: #f0f7ff;}
+.stChatMessage {
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    max-width: 85%;
+}
+.stChatMessage:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+.stChatMessage[data-testid*="user"] {
+    background-color: #f0f0f0;
+    border-bottom-right-radius: 4px;
+    margin-left: auto;
+}
+.stChatMessage[data-testid*="assistant"] {
+    background-color: #e8f4fd;
+    border-bottom-left-radius: 4px;
+    margin-right: auto;
+}
 
 /* Input styling */
-.stChatInputContainer {border-top: 1px solid #eee; padding-top: 15px;}
-.stTextInput>div>div>input {border-radius: 8px; border: 1px solid #ddd; padding: 10px;}
+.stChatInputContainer {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+.stTextInput>div>div>input {
+    border-radius: 24px;
+    border: 1px solid #e0e0e0;
+    padding: 12px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+.stTextInput>div>div>input:focus {
+    border-color: #0084ff;
+    box-shadow: 0 2px 8px rgba(0,132,255,0.15);
+}
 
 /* Button styling */
-.stButton>button {border-radius: 6px; background-color: #0084ff; color: white; font-weight: 500; border: none; transition: background-color 0.3s;}
-.stButton>button:hover {background-color: #0073e6;}
+.stButton>button {
+    border-radius: 20px;
+    background-color: #0084ff;
+    color: white;
+    font-weight: 500;
+    border: none;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,132,255,0.2);
+}
+.stButton>button:hover {
+    background-color: #0073e6;
+    box-shadow: 0 4px 8px rgba(0,132,255,0.3);
+    transform: translateY(-1px);
+}
+.stButton>button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0,132,255,0.2);
+}
 
 /* Sidebar styling */
-.css-1d391kg {background-color: #f9f9f9;}
-.sidebar-content {padding: 20px 10px;}
-.sidebar-header {font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #444;}
+.css-1d391kg, [data-testid="stSidebar"] {
+    background-color: white;
+    border-right: 1px solid #f0f0f0;
+}
+.sidebar-content {
+    padding: 25px 15px;
+}
+.sidebar-header {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+    letter-spacing: -0.3px;
+}
+.sidebar-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
 
 /* Quick questions */
-.quick-question {margin-bottom: 8px;}
+.quick-question-container {
+    margin: 15px 0;
+}
+.quick-question {
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+.quick-question:hover {
+    transform: translateX(2px);
+}
+
+/* Spinner */
+.stSpinner {
+    border-width: 2px;
+    border-top-color: #0084ff !important;
+}
 
 /* Remove fullscreen button and other unnecessary elements */
-.viewerBadge_link__1S137 {display: none;}
-.css-1aehpvj {display: none;}
-.css-18e3th9 {padding-top: 2rem;}
+.viewerBadge_link__1S137, .css-1aehpvj {display: none;}
+.css-18e3th9 {padding-top: 1.5rem;}
+
+/* Footer */
+.footer {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {opacity: 0.6;}
+    50% {opacity: 1;}
+    100% {opacity: 0.6;}
+}
+.thinking {
+    animation: pulse 1.5s infinite;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar with minimal design
+# Sidebar with enhanced minimal design
 with st.sidebar:
     st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
 
-    # Simple logo and title
-    col1, col2 = st.columns([1, 3])
-    with col1:
-        st.markdown('🧞', unsafe_allow_html=True)
-    with col2:
-        st.markdown('<div class="sidebar-header">Dubai Genie</div>', unsafe_allow_html=True)
+    # Improved logo and title
+    st.markdown('<div style="display: flex; align-items: center; margin-bottom: 15px;">', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 32px; margin-right: 10px;">🧞</span>', unsafe_allow_html=True)
+    st.markdown('<div><div class="sidebar-header">Dubai Genie</div><div class="sidebar-description">Your AI trip planner</div></div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown('<div class="sidebar-description">Your AI trip planner for Dubai</div>', unsafe_allow_html=True)
     st.caption("Powered by Google Gemini 2.0 Flash")
-    st.markdown('<hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">', unsafe_allow_html=True)
+    st.markdown('<hr style="margin: 20px 0; border: none; border-top: 1px solid #f0f0f0;">', unsafe_allow_html=True)
 
-    # Quick prompts with cleaner design
-    st.markdown('<div class="sidebar-header">Quick Questions</div>', unsafe_allow_html=True)
+    # Enhanced quick prompts section
+    st.markdown('<div class="sidebar-header">✨ Quick Questions</div>', unsafe_allow_html=True)
+    st.markdown('<div class="quick-question-container">', unsafe_allow_html=True)
 
     quick_prompts = [
-        "What are the top attractions in Dubai?",
-        "Best time to visit Dubai?",
-        "Budget-friendly activities in Dubai?",
-        "Transportation options in Dubai?",
-        "Dubai cultural etiquette tips?"
+        "📍 Top 5 must-see attractions?",
+        "🌡️ Best time to visit Dubai?",
+        "💰 Budget-friendly activities?",
+        "🚕 How to get around Dubai?",
+        "👋 Local customs & etiquette?"
     ]
 
     for prompt in quick_prompts:
         if st.button(prompt, key=f"btn_{prompt}", on_click=handle_quick_prompt, args=(prompt,)):
             pass  # The actual action happens in the on_click function
 
-    st.markdown('<hr style="margin: 15px 0; border: none; border-top: 1px solid #eee;">', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<hr style="margin: 20px 0; border: none; border-top: 1px solid #f0f0f0;">', unsafe_allow_html=True)
 
-    # Conversation management with cleaner design
-    st.markdown('<div class="sidebar-header">Conversation</div>', unsafe_allow_html=True)
+    # Improved conversation management
+    st.markdown('<div class="sidebar-header">💬 Conversation</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Clear", key="clear_btn"):
+        if st.button("🗑️ Clear", key="clear_btn"):
             st.session_state.messages = initial_message
             st.session_state.conversation_started = False
-            st.success("Cleared!")
+            st.success("Conversation cleared!")
 
     with col2:
-        if st.button("Export", key="export_btn"):
+        if st.button("📥 Export", key="export_btn"):
             if len(st.session_state.messages) > 2:
                 filename = export_conversation()
-                st.success(f"Exported!")
+                st.success(f"Conversation exported!")
             else:
-                st.warning("No conversation yet")
+                st.warning("Nothing to export yet")
+
+    # Add a helpful tip
+    st.markdown('<div style="margin-top: 20px; padding: 12px; background-color: #f8f9fa; border-radius: 8px; font-size: 13px;">', unsafe_allow_html=True)
+    st.markdown('💡 <b>Tip:</b> Ask specific questions about Dubai to get the most helpful responses.', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Main chat interface with minimal design
-st.markdown("<div class='main-header'>Dubai Genie</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>Your AI-powered Dubai trip planner</div>", unsafe_allow_html=True)
-st.caption("Using Google Gemini 2.0 Flash - Fast and efficient model")
+# Main chat interface with enhanced minimal design
+st.markdown("<div class='main-header'>✨ Dubai Genie</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-header'>Your personal Dubai trip planning assistant</div>", unsafe_allow_html=True)
+st.markdown("<div class='app-caption'>Using Google Gemini 2.0 Flash • Fast, simple responses</div>", unsafe_allow_html=True)
 
-# Chat container with minimal design
+# Chat container with enhanced styling
 st.markdown("<div class='chat-container'></div>", unsafe_allow_html=True)
 
-# Display chat messages with minimal styling
+# Welcome message if no conversation has started
+if not st.session_state.conversation_started and len(st.session_state.messages) <= 2:
+    st.markdown("""
+    <div style="padding: 20px; background-color: #f8f9fa; border-radius: 12px; margin: 20px 0; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 10px;">👋 Welcome to Dubai Genie!</div>
+        <p style="color: #666; margin-bottom: 15px;">I'm here to help you plan the perfect Dubai trip with simple, easy-to-understand recommendations.</p>
+        <div style="font-size: 14px; color: #888;">Ask me anything about Dubai or try one of the quick questions in the sidebar.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Display chat messages with enhanced styling
 for message in st.session_state.messages:
     if message["role"] != "system":
-        # Use minimal avatars
+        # Use consistent avatars
         avatar = None
         if message["role"] == "assistant":
             avatar = "🧞"
@@ -265,7 +412,22 @@ for message in st.session_state.messages:
             avatar = "👤"
 
         with st.chat_message(message["role"], avatar=avatar):
-            st.markdown(message["content"])
+            # Format assistant messages for better readability
+            if message["role"] == "assistant":
+                # Add some styling to lists and highlights in the assistant's messages
+                content = message["content"]
+                # Add styling to bullet points for better readability
+                content = content.replace("• ", "• <b>")
+                content = content.replace("\n- ", "\n- <b>")
+                content = content.replace(":\n", ":</b>\n")
+                # Highlight important information
+                content = content.replace("**", "<b>").replace("**", "</b>")
+                st.markdown(content, unsafe_allow_html=True)
+            else:
+                st.markdown(message["content"])
+
+# Add a footer
+st.markdown("<div class='footer'>Dubai Genie • Your AI Trip Planning Assistant</div>", unsafe_allow_html=True)
 
 # Check if a quick prompt was selected
 if "quick_prompt_selected" in st.session_state:
@@ -278,20 +440,30 @@ if "quick_prompt_selected" in st.session_state:
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # Show a minimal spinner while waiting for the response
-    with st.spinner("Thinking..."):
+    # Show an enhanced spinner while waiting for the response
+    with st.spinner(""):
+        st.markdown("<div class='thinking'>Dubai Genie is crafting a simple response for you...</div>", unsafe_allow_html=True)
+
         # Get response from Google Gemini
         response = get_response_from_gemini(st.session_state.messages)
 
         # Add a small delay to make the typing effect more realistic
-        time.sleep(0.5)
+        time.sleep(0.8)
 
         # Add assistant response to chat
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Display assistant response
+    # Display assistant response with formatting for better readability
     with st.chat_message("assistant", avatar="🧞"):
-        st.markdown(response)
+        # Format the response for better readability
+        content = response
+        # Add styling to bullet points
+        content = content.replace("• ", "• <b>")
+        content = content.replace("\n- ", "\n- <b>")
+        content = content.replace(":\n", ":</b>\n")
+        # Highlight important information
+        content = content.replace("**", "<b>").replace("**", "</b>")
+        st.markdown(content, unsafe_allow_html=True)
 
     # Clear the selected prompt so it doesn't repeat
     del st.session_state.quick_prompt_selected
@@ -299,8 +471,8 @@ if "quick_prompt_selected" in st.session_state:
     # Force a rerun to prevent duplicate processing
     st.rerun()
 
-# Chat input with minimal styling
-user_message = st.chat_input("Message Dubai Genie...")
+# Enhanced chat input with placeholder text
+user_message = st.chat_input("Ask about attractions, weather, costs, or type 'help'...")
 
 if user_message:
     # Add user message to chat
@@ -310,17 +482,44 @@ if user_message:
     with st.chat_message("user", avatar="👤"):
         st.markdown(user_message)
 
-    # Show a minimal spinner while waiting for the response
-    with st.spinner("Thinking..."):
-        # Get response from Google Gemini
-        response = get_response_from_gemini(st.session_state.messages)
+    # Show an enhanced spinner with custom message
+    with st.spinner(""):
+        st.markdown("<div class='thinking'>Dubai Genie is crafting a simple response for you...</div>", unsafe_allow_html=True)
+
+        # Special handling for 'help' command
+        if user_message.lower().strip() == 'help':
+            response = """
+            **Dubai Genie Help Guide**
+
+            Here are some things you can ask me about:
+
+            • **Attractions**: "What are the top family-friendly attractions?"
+            • **Costs**: "How much does a typical day cost in Dubai?"
+            • **Weather**: "What's the weather like in December?"
+            • **Transportation**: "What's the best way to get around Dubai?"
+            • **Food**: "What local foods should I try?"
+            • **Itineraries**: "Plan a 3-day trip for me"
+
+            I'm here to make your Dubai trip planning simple and enjoyable!
+            """
+        else:
+            # Get response from Google Gemini
+            response = get_response_from_gemini(st.session_state.messages)
 
         # Add a small delay to make the typing effect more realistic
-        time.sleep(0.5)
+        time.sleep(0.8)
 
         # Add assistant response to chat
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Display assistant response
+    # Display assistant response with formatting for better readability
     with st.chat_message("assistant", avatar="🧞"):
-        st.markdown(response)
+        # Format the response for better readability
+        content = response
+        # Add styling to bullet points
+        content = content.replace("• ", "• <b>")
+        content = content.replace("\n- ", "\n- <b>")
+        content = content.replace(":\n", ":</b>\n")
+        # Highlight important information
+        content = content.replace("**", "<b>").replace("**", "</b>")
+        st.markdown(content, unsafe_allow_html=True)
